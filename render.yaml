@@ -4,5 +4,5 @@ services:
     env: python
     plan: free
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    startCommand: gunicorn app:app --timeout 90 --workers 1 --threads 2
     autoDeploy: true
