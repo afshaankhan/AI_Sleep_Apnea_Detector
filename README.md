@@ -88,4 +88,4 @@ Stacking Ensemble (XGBoost + RF + LR) ➜ Isotonic Calibration ➜ Output Diagno
 	2.	XGBoost: A Scalable Tree Boosting System. Chen & Guestrin, KDD ’16
 	3.	SMOTE: Synthetic Minority Oversampling Technique. Chawla et al.
 
-> "Sleep smarter. Live stronger." 🛌✨
+"Sleep smarter. Live stronger." 🛌✨
