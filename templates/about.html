@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-gray-800 p-6 rounded-xl shadow-xl max-w-3xl mx-auto">
+
+  <h2 class="text-3xl font-bold mb-6 text-center glow">🔬 About This Project</h2>
+
+  <p class="text-sm text-gray-300 leading-relaxed mb-6 text-center">
+    This futuristic sleep apnea detection system was developed by graduate students at UMBC, combining biomedical signal processing with advanced ML to provide instant apnea predictions — beautifully wrapped in a web interface.
+  </p>
+
+  <!-- Accordion container -->
+  <div id="accordion" class="space-y-4">
+
+    {% for section in [
+      {'title': '👨‍💻 Team Members', 'color': 'text-sky-400', 'content': '<ul class="list-disc ml-6 mt-2 text-gray-200 text-sm"><li>Afshaan Khan</li><li>Saroj Kumandan</li><li>Siri Harshitha</li></ul>'},
+      {'title': '🧠 Core Technologies', 'color': 'text-sky-400', 'content': '<ul class="grid grid-cols-2 gap-x-6 list-disc ml-6 mt-2 text-gray-200 text-sm"><li>Python 3.11</li><li>Flask</li><li>Tailwind CSS</li><li>Chart.js</li><li>XGBoost</li><li>Random Forest</li><li>StackingClassifier</li><li>SMOTE / SMOTEENN</li><li>Optuna</li><li>SHAP</li></ul>'},
+      {'title': '📊 Model Strategy', 'color': 'text-sky-400', 'content': '<p class="text-sm text-gray-300 mt-2">Signal data is split into 30-second windows from ECG, EEG, and BP. Features like RMS, entropy, and spectral energy are extracted and passed through a calibrated stacking ensemble. Diagnosis is triggered if ≥5% of windows are flagged apneatic.</p>'},
+      {'title': '📈 Accuracy & Evaluation', 'color': 'text-sky-400', 'content': '<ul class="list-disc ml-6 mt-2 text-gray-200 text-sm"><li>✅ Accuracy (5-Fold CV): <span class="text-sky-400 font-bold">82.8%</span></li><li>✅ Macro F1-Score: <span class="text-sky-400 font-bold">58.9%</span></li><li>✅ Balanced ensemble improves recall without sacrificing precision</li></ul>'},
+      {'title': '⚠️ Challenges Faced', 'color': 'text-yellow-300', 'content': '<ul class="list-disc ml-6 mt-2 text-gray-200 text-sm"><li>Imbalanced apnea events across patient samples</li><li>WFDB alignment issues across signal channels</li><li>Missing or inconsistent EEG signals in some patients</li><li>Deploying models that are interpretable, not just accurate</li></ul>'},
+      {'title': '✅ How We Solved Them', 'color': 'text-green-300', 'content': '<ul class="list-disc ml-6 mt-2 text-gray-200 text-sm"><li>Used SMOTE and SMOTEENN to rebalance training data</li><li>Designed modular signal processors with error handling</li><li>Fallback strategies for missing EEG channels</li><li>SHAP integration to improve explainability of predictions</li></ul>'},
+      {'title': '🚀 Vision', 'color': 'text-sky-300', 'content': '<p class="text-sm text-gray-300 mt-2">Our goal is to democratize sleep disorder diagnostics using AI. Next steps include LLM-powered chat assistance, PDF reports, history tracking, and mobile optimization.</p>'}
+    ] %}
+    <div class="rounded border border-sky-700 bg-gray-900">
+      <button class="w-full text-left px-4 py-3 flex justify-between items-center {{ section.color }} font-semibold accordion-header focus:outline-none">
+        <span>{{ section.title }}</span>
+        <svg class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path class="accordion-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      <div class="accordion-content px-4 pt-1 pb-4 text-sm text-gray-300 hidden">
+        {{ section.content | safe }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <p class="text-sky-400 text-center text-sm italic mt-6">"Sleep smarter. Live stronger." 🛌✨</p>
+</div>
+
+<!-- Accordion toggle script -->
+<script>
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const content = header.nextElementSibling;
+      const icon = header.querySelector('.accordion-icon');
+
+      content.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    });
+  });
+</script>
+{% endblock %}

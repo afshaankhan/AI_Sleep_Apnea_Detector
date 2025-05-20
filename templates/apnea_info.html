@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-gray-800 p-6 rounded-xl shadow-xl max-w-3xl mx-auto">
+
+  <h2 class="text-3xl font-bold text-center glow" data-aos="fade-down">😴 What is Sleep Apnea?</h2>
+
+  <img src="{{ url_for('static', filename='images/sleep_apnea.png') }}" 
+     alt="Sleep Apnea Diagram"
+     class="rounded-lg mt-4 shadow-md border border-sky-500 mx-auto w-full max-w-md"
+     data-aos="zoom-in" data-aos-duration="1000" />
+
+  <p class="mt-6 text-sm text-gray-300 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+    <strong>Sleep apnea</strong> is a common but potentially serious sleep disorder in which breathing repeatedly stops and starts during sleep. 
+    This disruption can lead to daytime fatigue, poor concentration, memory issues, and even increased risk of heart disease, stroke, and diabetes.
+  </p>
+
+  <p class="mt-3 text-sm text-gray-300" data-aos="fade-up" data-aos-delay="200">
+    The two most common types are:
+    <ul class="list-disc ml-6 mt-2 text-gray-200">
+      <li><strong>Obstructive Sleep Apnea (OSA):</strong> Caused by physical blockage of the airway.</li>
+      <li><strong>Central Sleep Apnea (CSA):</strong> Caused by miscommunication between brain and breathing muscles.</li>
+    </ul>
+  </p>
+
+  <h3 class="text-xl font-semibold mt-8 text-sky-300" data-aos="fade-up" data-aos-delay="300">🔍 Severity Scale (AHI)</h3>
+  <p class="text-sm text-gray-300 mt-2" data-aos="fade-up" data-aos-delay="400">
+    Sleep apnea severity is clinically diagnosed using the <strong>Apnea-Hypopnea Index (AHI)</strong>, which measures the number of breathing interruptions per hour.
+  </p>
+
+  <table class="mt-4 table-auto text-sm bg-gray-700 rounded shadow-md w-full text-center"
+         data-aos="fade-up" data-aos-delay="500">
+    <thead class="bg-gray-600 text-sky-200">
+      <tr><th class="px-4 py-2">AHI</th><th class="px-4 py-2">Severity</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="px-4 py-2">0–4</td><td class="px-4 py-2">Normal</td></tr>
+      <tr><td class="px-4 py-2">5–14</td><td class="px-4 py-2">Mild</td></tr>
+      <tr><td class="px-4 py-2">15–29</td><td class="px-4 py-2">Moderate</td></tr>
+      <tr><td class="px-4 py-2">≥30</td><td class="px-4 py-2">Severe</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="text-xl font-semibold mt-8 text-sky-300" data-aos="fade-up" data-aos-delay="600">🧪 How Does Our Model Detect It?</h3>
+
+<p class="text-sm text-gray-300 mt-2" data-aos="fade-up" data-aos-delay="700">
+  We divide the signal data into 30-second windows and analyze features like:
+</p>
+
+<ul class="list-disc ml-6 mt-2 text-gray-200 text-sm" data-aos="fade-up" data-aos-delay="800">
+  <li>ECG/EEG/BP signal shape, frequency & entropy</li>
+  <li>Spectral energy, RMS, skew, kurtosis</li>
+  <li>Classification via ensemble machine learning models</li>
+</ul>
+  </p>
+  <p class="text-sm text-gray-300 mt-2" data-aos="fade-up" data-aos-delay="800">
+    If <strong>5% or more</strong> of your signal windows are flagged as apneatic, our system alerts you with a possible diagnosis.
+  </p>
+
+  <h3 class="text-xl font-semibold mt-8 text-sky-300" data-aos="fade-up" data-aos-delay="900">📌 What Should You Do If Flagged?</h3>
+
+<p class="text-sm text-gray-300 mt-2" data-aos="fade-up" data-aos-delay="1000">
+  Don’t panic — this tool is meant as an <strong>awareness assistant</strong>, not a medical diagnosis. We recommend:
+</p>
+
+<ul class="list-disc ml-6 mt-2 text-gray-200 text-sm" data-aos="fade-up" data-aos-delay="1100">
+  <li>Scheduling a sleep study with a professional</li>
+  <li>Tracking your snoring and fatigue symptoms</li>
+  <li>Exploring lifestyle changes like weight management or sleep position</li>
+</ul>
+  </p>
+
+  <div class="mt-8 text-center" data-aos="fade-in" data-aos-delay="1100">
+    <p class="text-sky-400 text-sm italic">"Understanding your sleep could save your life." 💤🫁</p>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- 🌌 Main Upload + Diagnose Container -->
+<div class="relative bg-gray-800/60 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-full max-w-2xl mx-auto border border-sky-800 overflow-hidden mt-12" data-aos="zoom-in">
+
+  <!-- 🧬 Grid Background -->
+  <div class="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none z-0"></div>
+
+  <!-- 🔹 Main Form -->
+  <h1 class="text-4xl font-extrabold mb-6 text-center glow tracking-wide relative z-10" data-aos="fade-down">
+    🌌 Sleep Apnea Detector
+  </h1>
+
+  <p class="text-center text-sm text-gray-300 mb-6 relative z-10" data-aos="fade-up" data-aos-delay="100">
+    Upload your biomedical sleep signal files to analyze potential apnea patterns using advanced AI.
+  </p>
+
+  <form id="upload-form" enctype="multipart/form-data" class="relative z-10" data-aos="fade-up" data-aos-delay="200">
+    <label class="block mb-2 text-sm font-medium text-sky-300">Upload .hea, .dat, .st files:</label>
+    <input type="file" name="wfdb_files" multiple required 
+           class="mb-4 w-full text-white bg-gray-700 p-2 rounded border border-sky-600" />
+
+    <button type="submit" class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-blue-500 hover:to-sky-600 transition duration-300 text-white font-semibold py-2 px-4 rounded w-full shadow-lg glow">
+      🚀 Upload & Diagnose
+    </button>
+  </form>
+
+  <!-- 🔄 Results & Loader -->
+  <div id="result" class="mt-6 bg-gray-700/60 p-4 rounded-lg text-sm font-mono text-gray-100 border border-sky-700 relative z-10" data-aos="fade-up" data-aos-delay="300">
+    <div id="loading" class="hidden flex flex-col items-center gap-3 text-center py-4">
+      <svg width="36" height="36" viewBox="0 0 512 512"
+           class="animate-lubdub mx-auto drop-shadow-lg"
+           xmlns="http://www.w3.org/2000/svg">
+        <path fill="#ef4444" d="M256 464s-192-112-192-272C64 128 128 64 208 64c34.9 0 69.7 14.7 96 40.1C330.3 78.7 365.1 64 400 64c80 0 144 64 144 128 0 160-192 272-192 272S256 464 256 464z"/>
+      </svg>
+      <p class="text-sm text-red-300 font-mono">
+        🫀 Diagnosing... analyzing biomedical signals.<br/>Please wait...
+      </p>
+    </div>
+  </div>
+
+  <!-- 📊 Chart -->
+  <canvas id="apneaChart" width="400" height="100"
+          class="mt-6 hidden rounded-lg border border-sky-500 bg-gray-800/50 p-2 shadow-md relative z-10"
+          data-aos="fade-up" data-aos-delay="400"></canvas>
+
+  <div id="chart-placeholder" class="mt-2 text-center text-sky-300 text-sm italic">
+    👋 Your prediction chart will appear here.
+  </div>
+</div>
+
+<!-- 🎨 Background Grid + Animation Styles -->
+<style>
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, #38bdf81a 1px, transparent 1px),
+                    linear-gradient(to bottom, #38bdf81a 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+@keyframes lubdub {
+  0%   { transform: scale(1); }
+  10%  { transform: scale(1.3); }
+  20%  { transform: scale(1); }
+  30%  { transform: scale(1.2); }
+  40%  { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+.animate-lubdub {
+  animation: lubdub 2s ease-in-out infinite;
+}
+</style>
+
+<!-- 📊 Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const form = document.getElementById('upload-form');
+const resultDiv = document.getElementById('result');
+const loadingDiv = document.getElementById('loading');
+const chartCanvas = document.getElementById('apneaChart');
+const placeholder = document.getElementById('chart-placeholder');
+let chartInstance = null;
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  resultDiv.innerHTML = loadingDiv.outerHTML;
+  document.getElementById('loading').classList.remove('hidden');
+  chartCanvas.classList.add('hidden');
+  placeholder.style.display = 'block';
+
+  try {
+    const res = await fetch('/predict', { method: 'POST', body: formData });
+    const data = await res.json();
+    loadingDiv.classList.add('hidden');
+
+    if (data.error) {
+      resultDiv.innerHTML = `<span class="text-red-400">❌ Error: ${data.error}</span>`;
+    } else {
+      const apneaPercent = (data.apnea_windows / data.total_windows) * 100;
+      const ahiEstimate = ((data.apnea_windows / data.total_windows) * 60).toFixed(1);
+      let severity = '', severityColor = '';
+      if (ahiEstimate < 5) { severity = 'Normal 🟢'; severityColor = 'text-green-400'; }
+      else if (ahiEstimate < 15) { severity = 'Mild 🟡'; severityColor = 'text-yellow-400'; }
+      else if (ahiEstimate < 30) { severity = 'Moderate 🟠'; severityColor = 'text-orange-400'; }
+      else { severity = 'Severe 🔴'; severityColor = 'text-red-400'; }
+
+      resultDiv.innerHTML = `
+        <div class="bg-gray-800 p-4 rounded-lg shadow-md border border-sky-600">
+          <p class="text-xl font-semibold text-green-400 mb-2">✅ Diagnosis Complete</p>
+          <p class="mb-1">🧠 <strong>Result:</strong> ${data.result}</p>
+          <p class="mb-1">🧮 <strong>Total Windows:</strong> ${data.total_windows}</p>
+          <p class="mb-1">😴 <strong>Apnea Windows:</strong> ${data.apnea_windows}</p>
+          <p class="mb-1">📊 <strong>Apnea %:</strong> ${apneaPercent.toFixed(2)}%</p>
+          <p class="mb-1 ${severityColor} font-semibold">🩻 Estimated AHI: ${ahiEstimate} → ${severity}</p>
+        </div>
+
+        <div class="mt-4 bg-blue-900/70 text-blue-300 rounded-md text-sm font-mono border border-blue-500 p-3">
+          🤖 <strong>AI Assistant:</strong><br>
+          ${ahiEstimate >= 5
+            ? 'This crosses the clinical threshold for sleep apnea. Please consult a sleep specialist. 🩺'
+            : 'This appears within a normal range. Stay healthy and monitor symptoms if they persist. 🌙'}
+        </div>
+
+        <div class="mt-6 flex gap-4 justify-center">
+          <a href="/apnea-info" class="text-sm text-sky-400 hover:underline">💡 Learn about AHI & Severity Scale</a>
+          <button onclick="window.location.reload()" class="text-sm text-red-300 hover:underline">🔁 Upload Again</button>
+        </div>
+      `;
+
+      resultDiv.scrollIntoView({ behavior: "smooth" });
+      chartCanvas.classList.remove('hidden');
+      placeholder.style.display = 'none';
+
+      const ctx = chartCanvas.getContext('2d');
+      if (chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.details.map((_, i) => i + 1),
+          datasets: [{
+            label: 'Apnea Prediction (1 = Apnea)',
+            data: data.details,
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: 'rgba(59, 130, 246, 0.3)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true, max: 1 }
+          }
+        }
+      });
+    }
+  } catch (err) {
+    loadingDiv.classList.add('hidden');
+    resultDiv.innerHTML = `<span class="text-red-400">❌ JS Error: ${err.message}</span>`;
+  }
+});
+</script>
+
+{% endblock %}
