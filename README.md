@@ -51,7 +51,7 @@ Developed by graduate students at **University of Maryland, Baltimore County (UM
 
 ## 🔍 Model Pipeline
 
-```text WFDB File Upload ➜ Signal Processing ➜ 30-sec Windows ➜ Feature Extraction ➜ SMOTE ➜ Stacking Ensemble (XGBoost + RF + LR) ➜ Isotonic Calibration ➜ Output Diagnosis```
+```WFDB File Upload ➜ Signal Processing ➜ 30-sec Windows ➜ Feature Extraction ➜ SMOTE ➜ Stacking Ensemble (XGBoost + RF + LR) ➜ Isotonic Calibration ➜ Output Diagnosis```
 
 ##📈 Evaluation Metrics
 
