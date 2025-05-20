@@ -53,7 +53,9 @@ Developed by graduate students at **University of Maryland, Baltimore County (UM
 
 ```WFDB File Upload ➜ Signal Processing ➜ 30-sec Windows ➜ Feature Extraction ➜ SMOTE ➜ Stacking Ensemble (XGBoost + RF + LR) ➜ Isotonic Calibration ➜ Output Diagnosis```
 
-##📈 Evaluation Metrics
+---
+
+## 📈 Evaluation Metrics
 
 | Metric              | Value    |
 |---------------------|----------|
@@ -63,7 +65,6 @@ Developed by graduate students at **University of Maryland, Baltimore County (UM
 | 📈 Recall (Apnea)    | **0.59**   |
 | 📊 AUC-ROC           | **0.81**   |
 
----
 ## 🔑 Key Takeaways
 
 - Combined biomedical signal processing with advanced ensemble models (XGBoost + Random Forest).
@@ -86,4 +87,4 @@ Developed by graduate students at **University of Maryland, Baltimore County (UM
 	2.	XGBoost: A Scalable Tree Boosting System. Chen & Guestrin, KDD ’16
 	3.	SMOTE: Synthetic Minority Oversampling Technique. Chawla et al.
 
-"Sleep smarter. Live stronger." 🛌✨
+## Sleep smarter. Live stronger. 🛌✨
